@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1313</width>
+    <width>1905</width>
     <height>725</height>
    </rect>
   </property>
@@ -91,7 +91,7 @@
      <rect>
       <x>730</x>
       <y>140</y>
-      <width>561</width>
+      <width>1081</width>
       <height>421</height>
      </rect>
     </property>
@@ -107,13 +107,31 @@
      </property>
     </column>
    </widget>
+   <widget class="QLabel" name="error">
+    <property name="geometry">
+     <rect>
+      <x>850</x>
+      <y>600</y>
+      <width>331</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1313</width>
+     <width>1905</width>
      <height>26</height>
     </rect>
    </property>

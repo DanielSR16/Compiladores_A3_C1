@@ -39,7 +39,7 @@ tokens = {
     'coma': [','],
     'parentesis' : ['(',')'],
 
-'palabraReservada':['BaseDeDatos','NombreTabla','ListaCampo','LavePrimaria','noVacio','incrementarse'],
+'palabraReservada':['BaseDeDatos','NombreTabla','ListaCampo','LlavePrimaria','noVacio','incrementarse'],
     'valor' : ['entero','enteroSuperPequeño','enteroPequeño'
                          'fecha','fechaHora','hora','textoPequeño','texto','textoMediano','textoLargo','textoLargo','dobleFlotante'
                          'cadenaDefinida','cadena','enteroMediano','enteroGande','enteroDecimal','decimalDoble'
@@ -52,14 +52,14 @@ tokens = {
 listaEncontrados = []
 auxListaEncontrado = []
 encontradosString = []
-errorSimbolo = False
+
 class index(QMainWindow):
     def __init__(self,data):
         super().__init__()
         self.data = data
         uic.loadUi("vista3.ui", self)
         self.boton.clicked.connect(self.input_to_List)
-        self.tablaW.setColumnWidth(0,600)
+        self.tablaW.setColumnWidth(0,1500)
         
        
 
@@ -81,6 +81,16 @@ class index(QMainWindow):
 
         validarTokens()
         self.cargarData()
+        self.mostrarError()
+    def mostrarError(self):
+        self.error.setText('')
+        stringError = ''
+        if(len(encontrados['error'])>0):
+            for i in encontrados['error']:
+                stringError = stringError + i
+            self.error.setText('Error encontrador en: ' + stringError)
+        encontrados['error'] = []
+
     def cargarData(self):
         self.tablaW.setRowCount(len(encontradosString))
         for  i in range(0,len(encontradosString)):
@@ -98,7 +108,7 @@ class index(QMainWindow):
 
 
 def validarTokens():
-
+    errorSimbolo = False
     for numLinea in range(0,len(listaPrimaria)):
         if errorSimbolo ==False:
             
@@ -125,7 +135,7 @@ def validarTokens():
                         auxListaEncontrado.append('dosPuntos')
                         dataBD = listaPrimaria[numLinea][len(palabra)+1:len( listaPrimaria[numLinea])]
                         listaPrimaria[numLinea] = dataBD
-                        print('Soy base de datos')
+                   
                         verificarTokens(listaPrimaria[numLinea])
                         listaPrimaria[numLinea] = []
 
@@ -136,7 +146,7 @@ def validarTokens():
                         listaPrimaria[numLinea] = dataNT
                         verificarTokens(listaPrimaria[numLinea])
                         listaPrimaria[numLinea] = []
-                        print('NombreTabla')
+                  
 
                     elif(palabra == 'ListaCampo'):
                         auxListaEncontrado.append('PalabraReservada')
@@ -145,15 +155,15 @@ def validarTokens():
                         listaPrimaria[numLinea] = dataLC
                         verificarTokensCampo(listaPrimaria[numLinea])
                         listaPrimaria[numLinea] = []
-                        print('ListasCampo')
-                    elif(palabra == 'LavePrimaria'):
+               
+                    elif(palabra == 'LlavePrimaria'):
                         auxListaEncontrado.append('PalabraReservada')
                         auxListaEncontrado.append('dosPuntos')
                         dataLP = listaPrimaria[numLinea][len(palabra)+1:len( listaPrimaria[numLinea])]
                         listaPrimaria[numLinea] = dataLP
                         verificarTokens(listaPrimaria[numLinea])
                         listaPrimaria[numLinea] = []
-                        print('PrimariKEY')
+                 
 
                     else:
                         print('SoyNormal')
@@ -165,12 +175,15 @@ def validarTokens():
             listaEncontrados.append(listaAux)
             auxListaEncontrado.clear()
             if len(encontrados['error']) > 0:
-                print('error')
+               errorSimbolo = True
           
-        print('ListaEnocontrados')
-        print(listaEncontrados)
-        listasToString()
-        print(encontradosString)
+    # print('ListaEnocontrados')
+    # print(listaEncontrados)
+    listasToString()
+    # print(encontradosString)
+    for borrarEncontrado in range(0,len(listaEncontrados)):
+        listaEncontrados.pop()      
+
 
         
 
@@ -215,6 +228,7 @@ def verificarTokens(palabra):
         if bandera == False:
             auxListaEncontrado.append('error')
             encontrados['error'].append(letra)
+
         
 def verificarTokensCampo(palabra):
     campoAux = ''
@@ -230,8 +244,7 @@ def verificarTokensCampo(palabra):
     
             # print(letra)
             if letra == '-':
-                print('entre a guion')
-                print(campoAux)
+    
                 existe_in_list_valor = campoAux in tokens['valor']
                 existe_in_list_reservadas = campoAux in tokens['palabraReservada']
                 if existe_in_list_valor == True:
@@ -245,7 +258,7 @@ def verificarTokensCampo(palabra):
                     auxListaEncontrado.append('guion')
                 campoAux = ''
             elif letra == '(':
-                print('parentesis')
+       
                 print(campoAux)
                 existe_in_list_reservadas1 = campoAux in tokens['valor']
                
@@ -260,8 +273,8 @@ def verificarTokensCampo(palabra):
             elif letra == ',':
              
                 existe_in_list_reservadas2 = campoAux in tokens['palabraReservada']
-                print(tokens['palabraReservada'])
-                print(existe_in_list_reservadas2)
+          
+          
                 if existe_in_list_reservadas2 == True:
                     auxListaEncontrado.append('palabraReservada')
                     auxListaEncontrado.append('coma')
@@ -272,6 +285,8 @@ def verificarTokensCampo(palabra):
                         
 def listasToString():
     auxEncontradosString = ''
+    encontradosString .clear()
+
     for encontrado in listaEncontrados:
         for datos in encontrado:
             auxEncontradosString = auxEncontradosString + datos + ' '
