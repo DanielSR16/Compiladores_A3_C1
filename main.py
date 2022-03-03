@@ -53,6 +53,9 @@ listaEncontrados = []
 auxListaEncontrado = []
 encontradosString = []
 
+encontradosValores = []
+encontradosvalores_aux = []
+
 class index(QMainWindow):
     def __init__(self,data):
         super().__init__()
@@ -82,6 +85,7 @@ class index(QMainWindow):
         validarTokens()
         self.cargarData()
         self.mostrarError()
+        
     def mostrarError(self):
         self.error.setText('')
         stringError = ''
@@ -110,10 +114,12 @@ class index(QMainWindow):
 def validarTokens():
     errorSimbolo = False
     for numLinea in range(0,len(listaPrimaria)):
+        print(listaPrimaria)
         if errorSimbolo ==False:
             
             auxString = ''
             for valores in listaPrimaria[numLinea]:
+                print(valores)
                 if valores != ':':
                     auxString = auxString + valores
             
@@ -126,27 +132,32 @@ def validarTokens():
                     
                     existe_in_list_dosPuntos = ':' in encontrados['dosPuntos']
                     if( existe_in_list_dosPuntos == False):
+                   
                         encontrados['dosPuntos'].append(':')
 
                     palabra = palabrasReservadas(auxString)
                     
                     if(palabra == 'BaseDeDatos'):
+
                         auxListaEncontrado.append('PalabraReservada')
                         auxListaEncontrado.append('dosPuntos')
+                        
                         dataBD = listaPrimaria[numLinea][len(palabra)+1:len( listaPrimaria[numLinea])]
                         listaPrimaria[numLinea] = dataBD
+                       
                    
                         verificarTokens(listaPrimaria[numLinea])
                         listaPrimaria[numLinea] = []
 
                     elif(palabra == 'NombreTabla'):
+
                         auxListaEncontrado.append('PalabraReservada')
                         auxListaEncontrado.append('dosPuntos')
                         dataNT = listaPrimaria[numLinea][len(palabra)+1:len( listaPrimaria[numLinea])]
                         listaPrimaria[numLinea] = dataNT
                         verificarTokens(listaPrimaria[numLinea])
                         listaPrimaria[numLinea] = []
-                  
+                        print('soy data tabala',dataNT)
 
                     elif(palabra == 'ListaCampo'):
                         auxListaEncontrado.append('PalabraReservada')
@@ -291,6 +302,7 @@ def listasToString():
         for datos in encontrado:
             auxEncontradosString = auxEncontradosString + datos + ' '
         encontradosString.append(auxEncontradosString)
+        print(encontradosString)
         auxEncontradosString = ''
 
 
